@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scheme Details - KrishiVerse</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: url("images/bg.png") no-repeat center center/cover fixed;
+      margin: 0; padding: 20px;
+      max-width: 900px; margin: auto;
+      color: #2f4f1f;
+    }
+    h2 { text-align: center; }
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    h3 { margin-top: 20px; }
+    ul { margin: 5px 0 15px 20px; }
+    a {
+      display: inline-block;
+      margin-top: 15px;
+      padding: 10px 16px;
+      background: #4caf50;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+    a:hover { background: #45a049; }
+  </style>
+</head>
+<body>
+  <h2>Scheme Details</h2>
+  <div class="card" id="details">
+    <!-- Scheme details will load here -->
+  </div>
+
+  <script>
+    // Get scheme name from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const scheme = urlParams.get("scheme");
+
+    // Scheme data
+    const schemes = {
+      cmkisan: {
+        title: "CM-Kisan Scheme (Odisha)",
+        eligibility: [
+          "Must be a resident of Odisha",
+          "Small, marginal or landless farmer",
+          "Linked bank account"
+        ],
+        documents: [
+          "Aadhaar card",
+          "Land/tenant proof (if applicable)",
+          "Bank account details"
+        ],
+        process: [
+          "Register through official Odisha agriculture portal or at local CSC.",
+          "Submit documents and verify eligibility.",
+          "Financial support transferred directly to bank account."
+        ],
+        link: "https://agri.odisha.gov.in/"
+      },
+      pmkisan: {
+        title: "PM-Kisan Samman Nidhi (Central Govt)",
+        eligibility: [
+          "All small and marginal farmers across India",
+          "Up to 2 hectares of cultivable land",
+          "Not applicable to institutional landholders"
+        ],
+        documents: [
+          "Aadhaar card",
+          "Land ownership proof",
+          "Bank passbook"
+        ],
+        process: [
+          "Register at PM-Kisan portal or CSC center.",
+          "State government verifies land records.",
+          "₹6000/year credited in 3 installments."
+        ],
+        link: "https://pmkisan.gov.in/"
+      },
+      pmfby: {
+        title: "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+        eligibility: [
+          "All farmers growing notified crops",
+          "Farmers with crop loans from banks are compulsory beneficiaries",
+          "Voluntary for non-loanee farmers"
+        ],
+        documents: [
+          "Aadhaar card",
+          "Land documents",
+          "Crop sowing details",
+          "Bank account"
+        ],
+        process: [
+          "Apply through insurance company, bank, or CSC center.",
+          "Pay premium (1.5% Rabi, 2% Kharif, 5% horticultural crops).",
+          "Claim settled based on crop loss report."
+        ],
+        link: "https://pmfby.gov.in/"
+      }
+    };
+
+    // Load scheme data
+    const detailsDiv = document.getElementById("details");
+    if (schemes[scheme]) {
+      const data = schemes[scheme];
+      detailsDiv.innerHTML = `
+        <h2>${data.title}</h2>
+        <h3>Eligibility</h3>
+        <ul>${data.eligibility.map(e => `<li>${e}</li>`).join("")}</ul>
+        <h3>Documents Required</h3>
+        <ul>${data.documents.map(d => `<li>${d}</li>`).join("")}</ul>
+        <h3>Application Process</h3>
+        <ul>${data.process.map(p => `<li>${p}</li>`).join("")}</ul>
+        <a href="${data.link}" target="_blank">Go to Official Website</a>
+      `;
+    } else {
+      detailsDiv.innerHTML = "<p>No details available for this scheme yet.</p>";
+    }
+  </script>
+</body>
+</html>

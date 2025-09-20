@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - KrishiVerse Store</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:20px; background: url("images/bg.png") no-repeat center center/cover fixed; }
+    h1 { text-align:center; color:#2f4f1f; }
+    form { max-width:500px; margin:20px auto; background:#fff; padding:20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); }
+    label { display:block; margin-top:10px; font-weight:bold; }
+    input, select, textarea { width:100%; padding:10px; margin-top:5px; border:1px solid #ccc; border-radius:5px; }
+    button { margin-top:20px; width:100%; padding:12px; background:#2f4f1f; color:#fff; border:none; border-radius:5px; font-size:16px; cursor:pointer; }
+    button:hover { background:#3c6d2b; }
+    .success { text-align:center; color:green; font-size:20px; margin-top:20px; }
+  </style>
+</head>
+<body>
+  <h1>Checkout</h1>
+  <form id="checkoutForm">
+    <label>Full Name</label>
+    <input type="text" required>
+
+    <label>Address</label>
+    <textarea required></textarea>
+
+    <label>Phone Number</label>
+    <input type="tel" required>
+
+    <label>Payment Method</label>
+    <select required>
+      <option value="">Select</option>
+      <option>Cash on Delivery</option>
+      <option>UPI</option>
+      <option>Credit/Debit Card</option>
+    </select>
+
+    <button type="submit">Place Order</button>
+  </form>
+
+  <div class="success" id="successMsg"></div>
+
+  <script>
+    document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      // Clear cart after checkout
+      localStorage.removeItem("cart");
+      document.getElementById("checkoutForm").style.display = "none";
+      document.getElementById("successMsg").innerText = "✅ Your order has been placed successfully!";
+    });
+  </script>
+</body>
+</html>

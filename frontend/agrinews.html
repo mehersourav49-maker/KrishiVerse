@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AgriNews - KrishiVerse</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --primary: #2f4f1f;
+      --secondary: #228b22;
+      --card-bg: #fff;
+      --text-dark: #333;
+      --shadow-light: rgba(0, 0, 0, 0.09);
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: url("images/bg.png") no-repeat center center/cover fixed;
+      padding: 20px;
+      min-height: 100vh;
+      color: var(--text-dark);
+    }
+    .heading-card {
+      background: var(--card-bg);
+      padding: 28px 20px;
+      border-radius: 14px;
+      box-shadow: 0 6px 20px var(--shadow-light);
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 30px auto;
+    }
+    .heading-card h1 {
+      margin: 0;
+      font-size: 2.8rem;
+      color: var(--primary);
+      letter-spacing: 2px;
+    }
+    .news-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      padding: 0 10px;
+      transition: all 0.4s ease;
+    }
+    .news-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--shadow-light);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      min-height: 360px;
+    }
+    .news-card:hover {
+      transform: translateY(-6px) scale(1.04);
+      box-shadow: 0 12px 36px rgba(47, 79, 31, 0.3);
+    }
+    .news-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-bottom: 2px solid var(--primary);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      transition: filter 0.3s ease;
+    }
+    .news-card img:hover {
+      filter: brightness(1.07);
+    }
+    .news-card h2 {
+      font-size: 1.25rem;
+      margin: 16px 20px 8px 20px;
+      color: var(--primary);
+      font-weight: 700;
+      line-height: 1.3;
+      flex-shrink: 0;
+    }
+    .news-card p {
+      font-size: 1rem;
+      color: var(--text-dark);
+      margin: 0 20px 20px 20px;
+      flex-grow: 1;
+      line-height: 1.5;
+      overflow-wrap: break-word;
+    }
+    .news-card a {
+      display: inline-block;
+      margin: 0 20px 20px 20px;
+      padding: 10px 18px;
+      background-color: var(--primary);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      align-self: flex-start;
+      transition: background-color 0.3s ease;
+    }
+    .news-card a:hover {
+      background-color: var(--secondary);
+    }
+    #loader {
+      margin: 80px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+    .spinner {
+      border: 6px solid #daf2d6;
+      border-top: 6px solid var(--primary);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 12px;
+    }
+    @keyframes spin {
+      0% {transform: rotate(0deg);}
+      100% {transform: rotate(360deg);}
+    }
+    @media (max-width: 600px) {
+      .heading-card h1 {
+        font-size: 2rem;
+      }
+      .news-card {
+        min-height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="heading-card">
+    <h1>AgriNews</h1>
+  </div>
+
+  <div id="loader" aria-live="polite" role="status">
+    <div class="spinner"></div>
+    <div>Loading latest news...</div>
+  </div>
+
+  <div class="news-container" id="news" style="display:none;"></div>
+
+  <script>
+    const apiKey = "6867a4e36bc7be8dce6c0c24e8f99fb3"; // Replace with your GNews API key
+    const url = `https://gnews.io/api/v4/search?q=agriculture&lang=en&country=in&max=10&token=${apiKey}`;
+
+    async function getNews() {
+      const loader = document.getElementById("loader");
+      const container = document.getElementById("news");
+      loader.style.display = 'flex';
+      container.style.display = 'none';
+
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        container.innerHTML = "";
+
+        if (!data.articles || data.articles.length === 0) {
+          container.innerHTML = '<p style="text-align:center; font-size: 1.1rem; color: #666;">No news articles available.</p>';
+        } else {
+          data.articles.forEach(article => {
+            const card = document.createElement("div");
+            card.className = "news-card";
+            const imageUrl = article.image && article.image.trim() !== '' ? article.image : 'https://via.placeholder.com/320x180?text=No+Image';
+            card.innerHTML = `
+              <img src="${imageUrl}" alt="${article.title ? article.title : 'News image'}" loading="lazy" />
+              <h2 title="${article.title || ''}">${article.title || 'Untitled Article'}</h2>
+              <p>${article.description || "No description available."}</p>
+              <a href="${article.url}" target="_blank" rel="noopener noreferrer" aria-label="Read full article on ${article.title || 'this topic'}">Read More</a>
+            `;
+            container.appendChild(card);
+          });
+        }
+      } catch (error) {
+        container.innerHTML = '<p style="text-align:center; color: red; font-weight: 600;">Error loading news. Please try again later.</p>';
+        console.error("Error fetching news:", error);
+      } finally {
+        loader.style.display = 'none';
+        container.style.display = 'grid';
+      }
+    }
+
+    getNews();
+  </script>
+</body>
+</html>

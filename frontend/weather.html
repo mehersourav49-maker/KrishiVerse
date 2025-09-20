@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Forecast - KrishiVerse</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: url("images/bg.png") no-repeat center center/cover fixed;
+      color: #333;
+      text-align: center;
+      padding: 30px;
+    }
+    h1 {
+      color: #2f5d62;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    button {
+      background: #2f5d62;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #3c8d82;
+    }
+    .weather-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 500px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+    .weather-card img {
+      width: 80px;
+    }
+    .weather-card ul {
+      text-align: left;
+      margin-top: 10px;
+    }
+    .hourly-forecast {
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding: 15px;
+      margin-top: 20px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .hour-card {
+      min-width: 100px;
+      background: #f8faf9;
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .hour-card img {
+      width: 50px;
+    }
+    .hour-card p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌾 Farmer-Centric Weather Forecast</h1>
+  <p>Enter your city to get weather details:</p>
+  <input type="text" id="cityInput" placeholder="Enter city name">
+  <button onclick="getWeather()">Get Weather</button>
+
+  <div id="weatherResult"></div>
+  <h2 id="hourlyTitle" style="display:none;">Hourly Forecast</h2>
+  <div id="hourlyForecast" class="hourly-forecast"></div>
+
+  <script>
+    async function getWeather() {
+      const city = document.getElementById('cityInput').value;
+      const apiKey = "4770653443cffa2439d373e8881cfc8a"; // your API key
+
+      const urlCurrent = `https://api.openweathermap.org/data/2.5/weather?q=${city},IN&appid=${apiKey}&units=metric`;
+      const urlForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city},IN&appid=${apiKey}&units=metric`;
+
+      try {
+        // Fetch current weather
+        const resCurrent = await fetch(urlCurrent);
+        if (!resCurrent.ok) throw new Error("City not found");
+        const currentData = await resCurrent.json();
+
+        // Extract data
+        const temp = currentData.main.temp;
+        const humidity = currentData.main.humidity;
+        const wind = currentData.wind.speed;
+        const weatherMain = currentData.weather[0].main.toLowerCase();
+
+        // Farmer advice
+        let doToday = [];
+        let avoidToday = [];
+
+        if (weatherMain.includes("rain")) {
+          avoidToday.push("Irrigation (soil already moist, risk of waterlogging).");
+          avoidToday.push("Harvesting crops (risk of spoilage).");
+          doToday.push("Store harvested grains and seeds in a dry place.");
+          doToday.push("Check field drainage to prevent flooding.");
+        }
+        if (temp > 35) {
+          doToday.push("Provide shade/extra irrigation to crops.");
+          avoidToday.push("Transplanting or sowing new seeds (heat stress).");
+        } else if (temp < 15) {
+          doToday.push("Mulch or cover sensitive crops.");
+          avoidToday.push("Spraying water late evening (can increase frost damage).");
+        }
+        if (humidity > 80) {
+          doToday.push("Inspect crops for pests and fungal diseases.");
+          avoidToday.push("Uncovered grain drying (may attract mold).");
+        }
+        if (wind > 10) {
+          avoidToday.push("Spraying pesticides/fertilizers (wind drift).");
+          doToday.push("Support young saplings and trellises.");
+        }
+        if (weatherMain.includes("clear")) {
+          doToday.push("Dry harvested grains and seeds in open sun.");
+          doToday.push("Plan irrigation if soil moisture is low.");
+        }
+
+        if (doToday.length === 0) doToday.push("Carry out regular farming activities as usual.");
+        if (avoidToday.length === 0) avoidToday.push("No major restrictions today.");
+
+        // Show results
+        document.getElementById('weatherResult').innerHTML = `
+          <div class="weather-card">
+            <h2>${currentData.name}, ${currentData.sys.country}</h2>
+            <img src="https://openweathermap.org/img/wn/${currentData.weather[0].icon}@2x.png" alt="">
+            <p><b>${currentData.weather[0].main}</b> - ${currentData.weather[0].description}</p>
+            <p>🌡️ Temp: ${temp}°C</p>
+            <p>💧 Humidity: ${humidity}%</p>
+            <p>🌬️ Wind: ${wind} m/s</p>
+            
+            <h3>✅ What To Do Today</h3>
+            <ul>${doToday.map(a => `<li>${a}</li>`).join("")}</ul>
+            
+            <h3>❌ What To Avoid Today</h3>
+            <ul>${avoidToday.map(a => `<li>${a}</li>`).join("")}</ul>
+          </div>
+        `;
+
+        // Forecast (next 12 intervals ~ 36 hours)
+        const resForecast = await fetch(urlForecast);
+        const forecastData = await resForecast.json();
+        const hourlyContainer = document.getElementById('hourlyForecast');
+        hourlyContainer.innerHTML = "";
+        document.getElementById('hourlyTitle').style.display = "block";
+
+        forecastData.list.slice(0, 12).forEach(item => {
+          const date = new Date(item.dt_txt);
+          const hour = date.toLocaleTimeString('en-IN', { hour: 'numeric', hour12: true });
+          const temp = Math.round(item.main.temp);
+          const icon = item.weather[0].icon;
+          const desc = item.weather[0].main;
+
+          const card = document.createElement("div");
+          card.classList.add("hour-card");
+          card.innerHTML = `
+            <p>${hour}</p>
+            <img src="https://openweathermap.org/img/wn/${icon}.png" alt="">
+            <p>${temp}°C</p>
+            <p>${desc}</p>
+          `;
+          hourlyContainer.appendChild(card);
+        });
+
+      } catch (error) {
+        document.getElementById('weatherResult').innerHTML = `<p style="color:red;">${error.message}</p>`;
+        document.getElementById('hourlyTitle').style.display = "none";
+        document.getElementById('hourlyForecast').innerHTML = "";
+      }
+    }
+  </script>
+</body>
+</html>

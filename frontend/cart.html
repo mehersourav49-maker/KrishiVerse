@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart - KrishiVerse Store</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:20px; background: url("images/bg.png") no-repeat center center/cover fixed; }
+    h1 { text-align:center; color:#2f4f1f; }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    th, td { padding:12px; border-bottom:1px solid #ddd; text-align:left; }
+    th { background:#2f4f1f; color:#fff; }
+    img { width:80px; height:80px; object-fit:contain; }
+    .total { font-size:20px; font-weight:bold; text-align:right; margin-top:20px; }
+    .btn {
+      padding:10px 15px; border:none; border-radius:5px; cursor:pointer; margin:5px;
+    }
+    .remove { background:#ff4d4d; color:#fff; }
+    .checkout { background:#2f4f1f; color:#fff; float:right; }
+    .checkout:hover { background:#3d6d2b; }
+  </style>
+</head>
+<body>
+  <h1>Your Shopping Cart</h1>
+  <table id="cartTable">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Product</th>
+        <th>Price</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <div class="total" id="totalPrice">Total: ₹0</div>
+  <button class="btn checkout" onclick="checkout()">Proceed to Checkout</button>
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function renderCart() {
+      const tbody = document.querySelector("#cartTable tbody");
+      tbody.innerHTML = "";
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price;
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><img src="${item.image}" alt="${item.title}"></td>
+          <td>${item.title}</td>
+          <td>₹${item.price}</td>
+          <td><button class="btn remove" onclick="removeItem(${index})">Remove</button></td>
+        `;
+        tbody.appendChild(row);
+      });
+
+      document.getElementById("totalPrice").innerText = "Total: ₹" + total;
+    }
+
+    function removeItem(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    function checkout() {
+      if(cart.length === 0) {
+        alert("Your cart is empty!");
+        return;
+      }
+      window.location.href = "checkout.html";
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

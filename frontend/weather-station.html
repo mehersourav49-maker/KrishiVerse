@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Portable Weather Station</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f9f9f9; }
+    header { position: relative; text-align: center; color: white; }
+    header img { width: 100%; height: 300px; object-fit: cover; filter: brightness(70%); }
+    header .title { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+    header .title h1 { font-size: 36px; margin: 0; }
+    header .title p { font-size: 18px; }
+
+    section { max-width: 1000px; margin:auto; padding:20px; }
+    .tabs { display: flex; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+    .tabs button { padding: 12px 20px; border: none; background: #e0e0e0; margin: 2px; cursor: pointer; border-radius: 6px; font-weight: bold; }
+    .tabs button.active { background: #2e7d32; color: white; }
+    .tab-content { display: none; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    .tab-content.active { display: block; }
+    h2 { color:#2e7d32; margin-top:0; }
+    ul, ol { margin-left:20px; }
+    .btn { display:inline-block; background:#2e7d32; color:white; padding:12px 25px; border-radius:8px; text-decoration:none; margin-top:15px; }
+    .btn:hover { background:#256428; }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="images/IoT3.png" alt="Portable Weather Station">
+    <div class="title">
+      <h1>Portable Weather Station</h1>
+      <p>Accurate weather data directly from your farm</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="tabs">
+      <button class="tablink active" onclick="openTab(event, 'about')">About</button>
+      <button class="tablink" onclick="openTab(event, 'uses')">Uses</button>
+      <button class="tablink" onclick="openTab(event, 'install')">Installation</button>
+      <button class="tablink" onclick="openTab(event, 'benefits')">Benefits</button>
+      <button class="tablink" onclick="openTab(event, 'buy')">Buy</button>
+    </div>
+
+    <div id="about" class="tab-content active">
+      <h2>About the Device</h2>
+      <p>The Portable Weather Station is a compact device that provides real-time farm-level weather data including temperature, rainfall, humidity, and wind speed. Farmers can use it for better planning and decision-making.</p>
+    </div>
+
+    <div id="uses" class="tab-content">
+      <h2>Uses</h2>
+      <ul>
+        <li>Monitor local temperature and humidity</li>
+        <li>Measure rainfall and forecast irrigation needs</li>
+        <li>Track wind speed for pesticide spraying safety</li>
+        <li>Integrate with crop advisory systems</li>
+      </ul>
+    </div>
+
+    <div id="install" class="tab-content">
+      <h2>Installation Guide</h2>
+      <ol>
+        <li>Place the station in an open field without shade or obstruction.</li>
+        <li>Mount it on a stand or pole about 2 meters above the ground.</li>
+        <li>Connect to solar or battery power supply.</li>
+        <li>Sync data with the mobile app or web dashboard.</li>
+      </ol>
+    </div>
+
+    <div id="benefits" class="tab-content">
+      <h2>Benefits</h2>
+      <ul>
+        <li>Farm-level weather accuracy better than city forecasts</li>
+        <li>Helps optimize irrigation and fertilizer scheduling</li>
+        <li>Improves crop disease and pest management</li>
+        <li>Portable and easy to install anywhere</li>
+      </ul>
+    </div>
+
+    <div id="buy" class="tab-content" style="text-align:center;">
+      <h2>Buy Now</h2>
+      <p>Get precise farm weather insights with the Portable Weather Station.</p>
+      <a href="#" class="btn">Book For Installation</a>
+    </div>
+  </section>
+
+  <script>
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+      tablinks = document.getElementsByClassName("tablink");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+      }
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+  </script>
+</body>
+</html>

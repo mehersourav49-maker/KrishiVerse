@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Government Schemes - KrishiVerse</title>
+  <style>
+    body  {
+      font-family: Arial, sans-serif;
+      background: url("images/bg.png") no-repeat center center/cover fixed;
+      margin: 0; padding: 20px;
+      max-width: 600px; margin: auto;
+      color: #2f4f1f;
+    }
+    h2 { text-align: center; }
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label { display: block; margin-top: 12px; }
+    input, select {
+      width: 100%; padding: 8px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px;
+      background: #4caf50;
+      color: white; border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover { background: #45a049; }
+  </style>
+</head>
+<body>
+  <h2>Find Eligible Schemes</h2>
+  <form action="eligible.html" method="get">
+
+    <label>State</label>
+    <select name="state" required>
+      <option value="Odisha" selected>Odisha</option>
+    </select>
+
+    <label>Age</label>
+    <input type="number" name="age" required>
+
+    <label>Gender</label>
+    <select name="gender" required>
+      <option value="">--Select--</option>
+      <option value="male">Male</option>
+      <option value="female">Female</option>
+      <option value="other">Other</option>
+    </select>
+
+    <label>Land Ownership</label>
+    <select name="land" required>
+      <option value="">--Select--</option>
+      <option value="landless">Landless</option>
+      <option value="small">Small Farmer (&lt;2 acres)</option>
+      <option value="marginal">Marginal Farmer (2-5 acres)</option>
+      <option value="large">Large Farmer (&gt;5 acres)</option>
+    </select>
+
+    <label>Annual Income</label>
+    <input type="number" name="income" placeholder="Enter in Rupees" required>
+
+    <label>Category / Caste</label>
+    <select name="category" required>
+      <option value="">--Select--</option>
+      <option value="general">General</option>
+      <option value="obc">OBC</option>
+      <option value="sc">SC</option>
+      <option value="st">ST</option>
+    </select>
+
+    <label>Disability</label>
+    <select name="disability" required>
+      <option value="no">No</option>
+      <option value="yes">Yes</option>
+    </select>
+
+    <label>Occupation</label>
+    <select name="occupation" required>
+      <option value="">--Select--</option>
+      <option value="farmer">Dairy Farmer</option>
+      <option value="laborer">Agricultural Laborer</option>
+      <option value="student">Fishermen</option>
+      <option value="entrepreneur">Ex-Service Men</option>
+      <option value="other">Other</option>
+    </select>
+
+    <button type="submit">Show Schemes</button>
+  </form>
+</body>
+</html>

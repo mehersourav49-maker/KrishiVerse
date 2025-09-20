@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KrishiVerse Store</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+<style>
+    body { font-family:'Montserrat',Arial,sans-serif; background: url("images/bg.png") no-repeat center center/cover fixed; margin:0; min-height:100vh;}
+    header { background:#fff; box-shadow:0 2px 8px rgba(40,167,69,.04); position:sticky; top:0; z-index:1020; padding:18px 0;}
+    .store-title { font-size:2rem; font-weight:700; color:#28A745; letter-spacing:1px; margin:0;}
+    nav .btn { border-radius:28px; font-weight:600; margin:0 3px;transition:background .18s,color .18s;}
+    nav .btn.active,nav .btn:hover { background:#28A745; color:#fff;}
+    .search-box input { border-radius:22px 0 0 22px; font-size:1rem; padding-left:15px;}
+    .search-box .input-group-text { background:#28A745; border-radius:0 22px 22px 0; color:#fff;}
+    .product-card { border-radius:18px; box-shadow:0 2px 14px rgba(40,167,69,.08);transition:transform .16s,box-shadow .16s;overflow:hidden;background:#fff;display:flex;flex-direction:column;height:100%;}
+    .product-card:hover { transform:translateY(-4px) scale(1.03);box-shadow:0 6px 24px rgba(40,167,69,.13);}
+    .product-card img { width:100%; height:200px; object-fit:contain; background:#EAFBE3; margin-bottom:4px; border-top-left-radius:18px; border-top-right-radius:18px;}
+    .card-title { font-size:1.1rem; font-weight:600; color:#28A745; margin:0 0 3px 0; min-height:40px; letter-spacing:.2px;}
+    .price { color:#218838; font-size:1.15rem; font-weight:bold;}
+    .badge { font-size:.95rem; margin-left:6px; background:#ffeeba; color:#856404; border-radius:10px; padding:4px 9px; font-weight:600;}
+    .add { background:linear-gradient(90deg,#28A745 80%,#6CC596 100%);color:#fff;font-size:1rem;font-weight:600;border:none;border-radius:15px;padding:10px 0;margin-top:14px;transition:background .19s;box-shadow:0 2px 7px rgba(40,167,69,.07);}
+    .add:hover {background:#218838;}
+    footer { background:#fff; box-shadow:0 -1px 6px rgba(40,167,69,.07);text-align:center;padding:18px 0;font-size:.98rem;color:#444;margin-top:35px;}
+    @media(max-width:768px){.store-title{font-size:1.4rem;}.product-card img{height:135px;}nav{flex-wrap:wrap!important;}}
+  </style>
+</head>
+<body>
+  <!-- Top Header with Cart -->
+  <header style="display:flex; justify-content:space-between; align-items:center; padding:15px; background:#2f4f1f; color:#fff;">
+    <h1>KrishiVerse Store</h1>
+    <div style="cursor:pointer;" onclick="window.location.href='cart.html'">
+      🛒 Cart (<span id="cartCount">0</span>)
+    </div>
+  </header>
+
+  <!-- Category + Search -->
+  <header class="container-fluid">
+    <div class="d-flex align-items-center justify-content-between flex-wrap">
+      <nav class="d-flex flex-wrap ms-4 my-2 my-md-0">
+        <button class="btn btn-outline-success active" onclick="filterCategory('All')">All</button>
+        <button class="btn btn-outline-success" onclick="filterCategory('Seeds')">Seeds</button>
+        <button class="btn btn-outline-success" onclick="filterCategory('Fertilizer')">Fertilizers</button>
+        <button class="btn btn-outline-success" onclick="filterCategory('Pesticide')">Pesticides</button>
+        <button class="btn btn-outline-success" onclick="filterCategory('Equipment')">Equipment</button>
+        <button class="btn btn-outline-success" onclick="filterCategory('Machinery')">Machinery</button>
+      </nav>
+      <div class="search-box input-group ms-md-4" style="max-width:330px;">
+        <input type="text" id="search" class="form-control" placeholder="Search agri products...">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Product Grid -->
+  <main>
+    <div class="container">
+      <div class="row gy-4 mt-3" id="productGrid"></div>
+    </div>
+  </main>
+
+  <footer>
+    <small>© KrishiVerse 2025. All rights reserved.</small>
+  </footer>
+
+  <script>
+    // Products list (100 items)
+    const products = [
+      {id:1,title:"Hybrid Tomato Seeds (50g)",price:250,image:"https://i.ibb.co/3yxPtmm/tomato-seeds.jpg",rating:4.6,category:"Seeds"},
+      {id:2,title:"Organic Wheat Seeds (5kg)",price:450,image:"https://i.ibb.co/fCx9Z9r/wheat-seeds.jpg",rating:4.5,category:"Seeds"},
+      {id:3,title:"BT Cotton Seeds (1kg)",price:850,image:"https://i.ibb.co/x7DkYgh/cotton-seeds.jpg",rating:4.4,category:"Seeds"},
+      {id:4,title:"Hybrid Paddy Seeds (10kg)",price:999,image:"https://i.ibb.co/44SMyjb/paddy-seeds.jpg",rating:4.7,category:"Seeds"},
+      {id:5,title:"Okra Seeds – Ladyfinger (100g)",price:120,image:"https://i.ibb.co/7vD2zBt/okra-seeds.jpg",rating:4.3,category:"Seeds"},
+      {id:6,title:"Natural Vermicompost (10kg)",price:299,image:"https://i.ibb.co/zsWmL6X/vermicompost.jpg",rating:4.8,category:"Fertilizer"},
+      {id:7,title:"Urea Fertilizer (45kg Bag)",price:620,image:"https://i.ibb.co/kMVRmKc/urea.jpg",rating:4.6,category:"Fertilizer"},
+      {id:8,title:"DAP Fertilizer (50kg)",price:1450,image:"https://i.ibb.co/mvTGhVg/dap.jpg",rating:4.7,category:"Fertilizer"},
+      {id:9,title:"NPK Fertilizer (20-20-20)",price:850,image:"https://i.ibb.co/LJkRGkb/npk.jpg",rating:4.5,category:"Fertilizer"},
+      {id:10,title:"Potash Fertilizer (25kg)",price:980,image:"https://i.ibb.co/Lt4cbGR/potash.jpg",rating:4.4,category:"Fertilizer"},
+      {id:11,title:"Neem Oil Pesticide (1L)",price:350,image:"https://i.ibb.co/mTn2n1N/neem-oil.jpg",rating:4.7,category:"Pesticide"},
+      {id:12,title:"Bio Insecticide (500ml)",price:280,image:"https://i.ibb.co/FXR2Vv1/bio-pesticide.jpg",rating:4.5,category:"Pesticide"},
+      {id:13,title:"Fungicide Mancozeb (1kg)",price:420,image:"https://i.ibb.co/Jc3J1cr/fungicide.jpg",rating:4.3,category:"Pesticide"},
+      {id:14,title:"Herbicide Glyphosate (1L)",price:690,image:"https://i.ibb.co/QHFvCfL/herbicide.jpg",rating:4.6,category:"Pesticide"},
+      {id:15,title:"Organic Pest Controller (2L)",price:560,image:"https://i.ibb.co/SJN0Fbr/organic-pesticide.jpg",rating:4.4,category:"Pesticide"},
+      {id:16,title:"Hand Sprayer Pump (5L)",price:1200,image:"https://i.ibb.co/n8VQ2G3/sprayer.jpg",rating:4.2,category:"Equipment"},
+      {id:17,title:"Battery Sprayer (16L)",price:3200,image:"https://i.ibb.co/kMJd6Qh/battery-sprayer.jpg",rating:4.5,category:"Equipment"},
+      {id:18,title:"Sickle (Iron Blade)",price:180,image:"https://i.ibb.co/Tc7jYYz/sickle.jpg",rating:4.4,category:"Equipment"},
+      {id:19,title:"Hoe/Khurpi (Steel)",price:250,image:"https://i.ibb.co/XWjQddL/khurpi.jpg",rating:4.5,category:"Equipment"},
+      {id:20,title:"Drip Irrigation Kit (100m)",price:2200,image:"https://i.ibb.co/bXDmSnn/drip-kit.jpg",rating:4.6,category:"Equipment"},
+      {id:21,title:"Mini Tractor Attachment",price:75000,image:"https://i.ibb.co/HrmM2h3/tractor.jpg",rating:4.6,category:"Machinery"},
+      {id:22,title:"Rotavator Machine",price:125000,image:"https://i.ibb.co/YyzHg94/rotavator.jpg",rating:4.7,category:"Machinery"},
+      {id:23,title:"Power Tiller",price:85000,image:"https://i.ibb.co/fpTtyQc/power-tiller.jpg",rating:4.5,category:"Machinery"},
+      {id:24,title:"Seed Drill Machine",price:68000,image:"https://i.ibb.co/nj1NqJd/seed-drill.jpg",rating:4.6,category:"Machinery"},
+      {id:25,title:"Threshing Machine",price:105000,image:"https://i.ibb.co/tZb0D0K/thresher.jpg",rating:4.7,category:"Machinery"},
+      {id:26,title:"Animal Feed – Cattle (25kg)",price:1150,image:"https://i.ibb.co/xDDGnFT/cattle-feed.jpg",rating:4.5,category:"Feed"},
+      {id:27,title:"Poultry Feed (20kg)",price:850,image:"https://i.ibb.co/n0DTSq1/poultry-feed.jpg",rating:4.6,category:"Feed"},
+      {id:28,title:"Goat Feed (15kg)",price:690,image:"https://i.ibb.co/hWS3zGF/goat-feed.jpg",rating:4.4,category:"Feed"},
+      {id:29,title:"Fish Feed Floating Pellets (10kg)",price:950,image:"https://i.ibb.co/bRZg3Jw/fish-feed.jpg",rating:4.7,category:"Feed"},
+      {id:30,title:"Organic Cattle Mineral Mix (5kg)",price:480,image:"https://i.ibb.co/Z6QjwmD/mineral-mix.jpg",rating:4.3,category:"Feed"},
+      {id:31,title:"Chilli Hybrid Seeds (50g)",price:275,image:"https://i.ibb.co/q7jQ0hv/chilli-seeds.jpg",rating:4.4,category:"Seeds"},
+      {id:32,title:"Brinjal Seeds (Purple, 100g)",price:180,image:"https://i.ibb.co/fYqrrbK/brinjal-seeds.jpg",rating:4.5,category:"Seeds"},
+      {id:33,title:"Maize Hybrid Seeds (5kg)",price:950,image:"https://i.ibb.co/SR9f34m/maize-seeds.jpg",rating:4.6,category:"Seeds"},
+      {id:34,title:"Groundnut Seeds (10kg)",price:1250,image:"https://i.ibb.co/w4ZvdWf/groundnut.jpg",rating:4.7,category:"Seeds"},
+      {id:35,title:"Mustard Seeds (1kg)",price:260,image:"https://i.ibb.co/1sPf5fq/mustard.jpg",rating:4.3,category:"Seeds"},
+      {id:36,title:"Sunflower Seeds (2kg)",price:550,image:"https://i.ibb.co/WVgfXwD/sunflower.jpg",rating:4.4,category:"Seeds"},
+      {id:37,title:"Carrot Seeds (100g)",price:190,image:"https://i.ibb.co/qjQXc3N/carrot.jpg",rating:4.5,category:"Seeds"},
+      {id:38,title:"Onion Seeds (250g)",price:320,image:"https://i.ibb.co/94FvNXd/onion.jpg",rating:4.6,category:"Seeds"},
+      {id:39,title:"Spinach Seeds (200g)",price:160,image:"https://i.ibb.co/2Fw4X0X/spinach.jpg",rating:4.4,category:"Seeds"},
+      {id:40,title:"Cauliflower Seeds (100g)",price:230,image:"https://i.ibb.co/Bn3NN4y/cauliflower.jpg",rating:4.5,category:"Seeds"},
+      {id:41,title:"Organic Bone Meal (5kg)",price:480,image:"https://i.ibb.co/xCz4Y6y/bone-meal.jpg",rating:4.6,category:"Fertilizer"},
+      {id:42,title:"Zinc Sulphate Fertilizer (10kg)",price:720,image:"https://i.ibb.co/5RkXZJ0/zinc.jpg",rating:4.5,category:"Fertilizer"},
+      {id:43,title:"Magnesium Sulphate (25kg)",price:1100,image:"https://i.ibb.co/gd8D6vF/magnesium.jpg",rating:4.6,category:"Fertilizer"},
+      {id:44,title:"Bio Compost Granules (20kg)",price:540,image:"https://i.ibb.co/V2R5ZKf/bio-compost.jpg",rating:4.7,category:"Fertilizer"},
+      {id:45,title:"Seaweed Extract Powder (1kg)",price:420,image:"https://i.ibb.co/5vTqbsJ/seaweed.jpg",rating:4.5,category:"Fertilizer"},
+      {id:46,title:"Organic Farmyard Manure (25kg)",price:750,image:"https://i.ibb.co/6RgF14Q/fym.jpg",rating:4.6,category:"Fertilizer"},
+      {id:47,title:"Silicon Based Fertilizer (5kg)",price:980,image:"https://i.ibb.co/vB9FFv5/silicon.jpg",rating:4.4,category:"Fertilizer"},
+      {id:48,title:"Gypsum Soil Conditioner (25kg)",price:660,image:"https://i.ibb.co/2M2W8CJ/gypsum.jpg",rating:4.5,category:"Fertilizer"},
+      {id:49,title:"Humic Acid Granules (1kg)",price:210,image:"https://i.ibb.co/GRpkT3R/humic.jpg",rating:4.6,category:"Fertilizer"},
+      {id:50,title:"Micronutrient Mix (500g)",price:180,image:"https://i.ibb.co/tJ8Y7Jh/micronutrient.jpg",rating:4.4,category:"Fertilizer"},
+      {id:51,title:"Organic Larvicide (500ml)",price:390,image:"https://i.ibb.co/F0q5YJc/larvicide.jpg",rating:4.5,category:"Pesticide"},
+      {id:52,title:"Pyrethrum Natural Insecticide (250ml)",price:320,image:"https://i.ibb.co/W0pZtfQ/pyrethrum.jpg",rating:4.6,category:"Pesticide"},
+      {id:53,title:"Carbendazim Fungicide (1kg)",price:640,image:"https://i.ibb.co/5WrHxnm/carbendazim.jpg",rating:4.5,category:"Pesticide"},
+      {id:54,title:"Copper Oxychloride Fungicide (500g)",price:380,image:"https://i.ibb.co/LkKhkS4/copper.jpg",rating:4.4,category:"Pesticide"},
+      {id:55,title:"Herbal Pest Repellent (1L)",price:450,image:"https://i.ibb.co/hYc8CF6/herbal.jpg",rating:4.5,category:"Pesticide"},
+      {id:56,title:"Termite Control Solution (2L)",price:1250,image:"https://i.ibb.co/5cfrHns/termite.jpg",rating:4.6,category:"Pesticide"},
+      {id:57,title:"Bio Fungicide Trichoderma (1kg)",price:520,image:"https://i.ibb.co/k1smmrv/trichoderma.jpg",rating:4.6,category:"Pesticide"},
+      {id:58,title:"Whitefly Trap (Pack of 10)",price:299,image:"https://i.ibb.co/X7TQjR3/whitefly.jpg",rating:4.4,category:"Pesticide"},
+      {id:59,title:"Fruit Fly Trap (Pack of 5)",price:250,image:"https://i.ibb.co/0mX5CC5/fruitfly.jpg",rating:4.3,category:"Pesticide"},
+      {id:60,title:"Aphid Control Spray (1L)",price:420,image:"https://i.ibb.co/JQGJ7w2/aphid.jpg",rating:4.5,category:"Pesticide"},
+      {id:61,title:"Garden Trowel (Steel)",price:150,image:"https://i.ibb.co/f2gRCv2/trowel.jpg",rating:4.6,category:"Equipment"},
+      {id:62,title:"Pruning Shears",price:320,image:"https://i.ibb.co/nRtd0G1/shears.jpg",rating:4.5,category:"Equipment"},
+      {id:63,title:"Hand Hoe",price:220,image:"https://i.ibb.co/FX7frMd/hand-hoe.jpg",rating:4.4,category:"Equipment"},
+      {id:64,title:"Spade (Iron)",price:480,image:"https://i.ibb.co/L16cXw5/spade.jpg",rating:4.6,category:"Equipment"},
+      {id:65,title:"Shovel (Wooden Handle)",price:420,image:"https://i.ibb.co/pvkby3W/shovel.jpg",rating:4.5,category:"Equipment"},
+      {id:66,title:"Weeder (Manual)",price:350,image:"https://i.ibb.co/N6LxnG2/weeder.jpg",rating:4.4,category:"Equipment"},
+      {id:67,title:"Wheelbarrow (Steel)",price:2450,image:"https://i.ibb.co/cNrvkkq/wheelbarrow.jpg",rating:4.6,category:"Equipment"},
+      {id:68,title:"Seedling Tray (Pack of 10)",price:360,image:"https://i.ibb.co/JcdLR4t/tray.jpg",rating:4.5,category:"Equipment"},
+      {id:69,title:"Watering Can (10L)",price:420,image:"https://i.ibb.co/SNhL0vn/watering.jpg",rating:4.4,category:"Equipment"},
+      {id:70,title:"Soil pH Testing Kit",price:1350,image:"https://i.ibb.co/BrHxLVg/ph-kit.jpg",rating:4.5,category:"Equipment"},
+      {id:71,title:"Cultivator Machine",price:98000,image:"https://i.ibb.co/DbZvR6J/cultivator.jpg",rating:4.7,category:"Machinery"},
+      {id:72,title:"Paddy Transplanter",price:165000,image:"https://i.ibb.co/h1PJfL2/transplanter.jpg",rating:4.8,category:"Machinery"},
+      {id:73,title:"Combine Harvester",price:350000,image:"https://i.ibb.co/dM8qFXC/harvester.jpg",rating:4.9,category:"Machinery"},
+      {id:74,title:"Sugarcane Planter",price:195000,image:"https://i.ibb.co/BLDZLmT/sugarcane-planter.jpg",rating:4.6,category:"Machinery"},
+      {id:75,title:"Sprinkler Irrigation System",price:48000,image:"https://i.ibb.co/bsRSpMF/sprinkler.jpg",rating:4.6,category:"Machinery"},
+      {id:76,title:"Rice Mill Machine",price:220000,image:"https://i.ibb.co/QMWhwpd/rice-mill.jpg",rating:4.7,category:"Machinery"},
+      {id:77,title:"Fodder Cutter Machine",price:65000,image:"https://i.ibb.co/xStfMfr/fodder.jpg",rating:4.5,category:"Machinery"},
+      {id:78,title:"Potato Planter",price:98000,image:"https://i.ibb.co/1ZTTs9d/potato-planter.jpg",rating:4.6,category:"Machinery"},
+      {id:79,title:"Hydraulic Plough",price:89000,image:"https://i.ibb.co/MRbcpn3/plough.jpg",rating:4.5,category:"Machinery"},
+      {id:80,title:"Sprayer Drone",price:550000,image:"https://i.ibb.co/TLxX7Ty/drone.jpg",rating:4.8,category:"Machinery"},
+      {id:81,title:"Buffalo Feed (25kg)",price:1150,image:"https://i.ibb.co/pjfttY0/buffalo.jpg",rating:4.5,category:"Feed"},
+      {id:82,title:"Duck Feed (10kg)",price:560,image:"https://i.ibb.co/3sGjcbT/duck.jpg",rating:4.4,category:"Feed"},
+      {id:83,title:"Sheep Feed (15kg)",price:720,image:"https://i.ibb.co/0Y9vnkm/sheep.jpg",rating:4.5,category:"Feed"},
+      {id:84,title:"Horse Feed (20kg)",price:1550,image:"https://i.ibb.co/GQM6Jm7/horse.jpg",rating:4.6,category:"Feed"},
+      {id:85,title:"Dog Supplement Feed (5kg)",price:680,image:"https://i.ibb.co/FzSB1CP/dog.jpg",rating:4.4,category:"Feed"},
+      {id:86,title:"Cat Fish Feed (8kg)",price:840,image:"https://i.ibb.co/nsgnBZn/catfish.jpg",rating:4.5,category:"Feed"},
+      {id:87,title:"Rabbit Feed (5kg)",price:420,image:"https://i.ibb.co/KqBPCLv/rabbit.jpg",rating:4.3,category:"Feed"},
+      {id:88,title:"Camel Feed (25kg)",price:1680,image:"https://i.ibb.co/1X0Ntrv/camel.jpg",rating:4.6,category:"Feed"},
+      {id:89,title:"Pigeon Feed (5kg)",price:260,image:"https://i.ibb.co/fYhhK6L/pigeon.jpg",rating:4.4,category:"Feed"},
+      {id:90,title:"Goose Feed (10kg)",price:580,image:"https://i.ibb.co/6RQYjzz/goose.jpg",rating:4.5,category:"Feed"},
+      {id:91,title:"Cow Dung Cake (Pack of 12)",price:199,image:"https://i.ibb.co/0GgR9Zy/cowdung.jpg",rating:4.5,category:"Organic"},
+      {id:92,title:"Bio Enzyme Plant Growth Booster (1L)",price:420,image:"https://i.ibb.co/82VXsL2/enzyme.jpg",rating:4.6,category:"Organic"},
+      {id:93,title:"Mycorrhizal Bio Fertilizer (500g)",price:350,image:"https://i.ibb.co/dQ1ghVL/mycorrhiza.jpg",rating:4.6,category:"Organic"},
+      {id:94,title:"Organic Cocopeat Block (5kg)",price:260,image:"https://i.ibb.co/cNySBM3/cocopeat.jpg",rating:4.5,category:"Organic"},
+      {id:95,title:"Azolla Cultivation Kit",price:780,image:"https://i.ibb.co/Wfwr7C5/azolla.jpg",rating:4.4,category:"Organic"},
+      {id:96,title:"Organic Jaggery Powder (5kg)",price:350,image:"https://i.ibb.co/bdNkLr2/jaggery.jpg",rating:4.5,category:"Organic"},
+      {id:97,title:"Organic Plant Tonic (500ml)",price:290,image:"https://i.ibb.co/YDr7rdH/plant-tonic.jpg",rating:4.5,category:"Organic"},
+      {id:98,title:"Panchagavya Liquid (1L)",price:310,image:"https://i.ibb.co/tbY7wfp/panchagavya.jpg",rating:4.6,category:"Organic"},
+      {id:99,title:"Organic Mulching Sheet (50m)",price:1250,image:"https://i.ibb.co/7bZXGpk/mulch.jpg",rating:4.6,category:"Organic"},
+      {id:100,title:"Organic Liquid Compost (5L)",price:640,image:"https://i.ibb.co/Z6pCLhF/liquid-compost.jpg",rating:4.5,category:"Organic"}]; // keep your same array here
+
+    // Load cart from localStorage
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function updateCartCount() {
+      document.getElementById("cartCount").innerText = cart.length;
+    }
+
+    // Add to cart
+    function addToCart(id) {
+      let item = products.find(p => p.id === id);
+      cart.push(item);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      alert(item.title + " added to cart!");
+    }
+
+    // Render products
+    function displayProducts(list) {
+      const grid = document.getElementById("productGrid");
+      grid.innerHTML = "";
+      if (list.length === 0) {
+        grid.innerHTML = '<div class="col-12 text-center text-muted"><br>No products found.</div>';
+        return;
+      }
+      list.forEach(p => {
+        const col = document.createElement("div");
+        col.className = "col-lg-3 col-md-4 col-6";
+        col.innerHTML = `
+          <div class="card product-card animate__animated animate__fadeIn h-100">
+            <img src="${p.image}" alt="${p.title}" loading="lazy">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">${p.title}</h5>
+              <div class="price mb-1">₹${p.price}</div>
+              <span class="badge"><i class="bi bi-star-fill"></i> ${p.rating}</span>
+              <button class="add mt-auto" onclick="addToCart(${p.id})">
+                <i class="bi bi-cart-plus"></i> Add to Cart
+              </button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(col);
+      });
+    }
+
+    // Search
+    document.getElementById("search").addEventListener("input", e => {
+      const keyword = e.target.value.toLowerCase();
+      const filtered = products.filter(p => p.title.toLowerCase().includes(keyword));
+      displayProducts(filtered);
+    });
+
+    // Category filter
+    function filterCategory(cat) {
+      document.querySelectorAll('nav .btn').forEach(x => x.classList.remove('active'));
+      [...document.querySelectorAll('nav .btn')].find(b => b.textContent === cat || (cat === "All" && b.textContent === "All")).classList.add('active');
+      if (cat === "All") displayProducts(products);
+      else displayProducts(products.filter(p => p.category === cat));
+    }
+
+    // Init
+    displayProducts(products);
+    updateCartCount();
+  </script>
+</body>
+</html>

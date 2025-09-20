@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Equipment</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+.terms {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* space between checkbox and text */
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.terms input {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.terms label {
+  margin: 0;
+  cursor: pointer;
+}
+
+.terms a {
+  color: #2d6a4f;
+  text-decoration: underline;
+}
+
+.terms a:hover {
+  color: #1b4332;
+}
+
+
+
+    form {
+      max-width: 400px;
+      margin: 30px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    }
+    label { display: block; margin-top: 10px; }
+    input { width: 100%; padding: 8px; margin-top: 5px; }
+    button { margin-top: 15px; padding: 10px; width: 100%; background: #40916c; color: white; border: none; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <header>Book Your Equipment</header>
+
+  <form onsubmit="submitBooking(event)">
+    <h3 id="equipmentName"></h3>
+    
+    <label>Your Name</label>
+    <input type="text" required>
+
+    <label>Contact</label>
+    <input type="text" required>
+
+     <label>Your Location</label>
+    <input type="text" required>
+
+     <label>Mail ID</label>
+    <input type="text" required>
+
+    <label>Booking Date</label>
+    <input type="date" required>
+
+    <!-- Terms & Policy -->
+<div class="terms">
+  <input type="checkbox" id="terms" required>
+  <label for="terms">I agree to the <a href="terms.html" target="_blank">Terms & Policy</a></label>
+</div>
+
+</div>
+
+</div>
+
+
+    <button type="submit">Confirm Booking</button>
+  </form>
+
+  <script>
+    // Get equipment name from URL
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("equipmentName").innerText = "Booking: " + params.get("equipment");
+
+    function submitBooking(e) {
+      e.preventDefault();
+      alert("✅ Booking Successful!\nThank you for using KrishiVerse.");
+      window.location.href = "equipment.html";
+    }
+  </script>
+</body>
+</html>

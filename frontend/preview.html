@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KrishiVerse | Smart Farming Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <style> 
+    :root {
+      --primary: #146a17;
+      --accent: #b6f09c;
+      --dark: #16480d;
+      --light: #f4faed;
+    }
+    body {
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(120deg, #e8f5e9 0%, #f1f8e9 100%);
+      color: #222;
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+    a { text-decoration: none; }
+    nav {
+      background: var(--primary);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 30px; height: 64px;
+    }
+    .logo {
+      display: flex; align-items: center;
+      color: #fff; font-size: 1.6rem; font-weight: 700; letter-spacing: 1px;
+    }
+    .logo img { height: 58px; margin-right: 16px; }
+    nav ul {
+      display: flex; list-style: none; gap: 22px; margin: 0; padding: 0;
+    }
+    nav ul li a {
+      color: #fff; font-weight: 600; transition: color 0.2s;
+    }
+    nav ul li a:hover { color: var(--accent); }
+    .lang-switch {
+      background: #fff; color: var(--primary);
+      border: none; border-radius: 8px; padding: 6px 12px;
+      cursor: pointer; font-weight: 600;
+      transition: 0.2s;
+    }
+    .lang-switch:hover { background: var(--accent); color: var(--dark); }
+    /* Hero */
+    .hero {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 160px 20px 100px;
+      background: url('images/bg.png') no-repeat center center/cover;
+      color: #fff; text-align: center; position: relative;
+    }
+    .hero::after {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(20, 106, 23, 0.55);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 700px; }
+    .hero-title {
+      font-size: 2.8rem; font-weight: 700; margin-bottom: 22px;
+      line-height: 1.4;
+    }
+    .hero-cta {
+      background: var(--accent); color: var(--dark);
+      border: none; border-radius: 32px;
+      padding: 14px 36px; font-size: 1.1rem; font-weight: 700;
+      cursor: pointer; transition: 0.25s; box-shadow: 0 2px 8px rgba(41,94,43,0.2);
+    }
+    .hero-cta:hover { background: #a2e670; transform: translateY(-3px); }
+    /* Features */
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px; padding: 60px 20px;
+      max-width: 1180px; margin: 0 auto;
+    }
+    .card {
+      background: #fff; border-radius: 22px;
+      padding: 34px 22px; text-align: center;
+      box-shadow: 0 4px 12px rgba(34,97,57,0.08);
+      border: 1px solid #e7f4e3;
+      transition: 0.3s;
+    }
+    .card:hover { transform: translateY(-6px) scale(1.02); border-color: var(--accent); }
+    .card img { width: 68px; margin-bottom: 20px; }
+    .card h3 { font-size: 1.15rem; color: var(--primary); margin: 0; font-weight: 700; }
+    /* Community */
+    .community {
+      max-width: 1150px; margin: 0 auto 60px;
+      padding: 50px 20px; background: var(--light);
+      border-radius: 18px; text-align: center;
+      box-shadow: 0 3px 12px rgba(34,97,57,0.06);
+    }
+    .community h2 {
+      font-size: 1.9rem; margin-bottom: 32px; color: var(--primary);
+    }
+    .reviews {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 24px;
+    }
+    .review {
+      background: #fff; border-radius: 14px;
+      padding: 20px; box-shadow: 0 2px 8px rgba(34,97,57,0.08);
+      text-align: left; position: relative;
+      transition: 0.3s;
+    }
+    .review:hover { transform: translateY(-4px); }
+    .review::before {
+      content: "“"; font-size: 2.5rem; color: var(--accent);
+      position: absolute; top: -10px; left: 14px;
+    }
+    .review strong { color: var(--primary); display: block; margin-bottom: 6px; }
+    .review span { font-size: 0.95rem; color: #333; }
+    /* Footer */
+    footer {
+      background: var(--primary); color: #eef8ec;
+      text-align: center; padding: 30px 10px 14px; margin-top: 60px;
+    }
+    .footer-links a {
+      color: var(--accent); margin: 0 12px; font-weight: 600;
+    }
+    .footer-links a:hover { text-decoration: underline; }
+    @media (max-width: 700px) {
+      .hero-title { font-size: 2rem; }
+      .container { padding: 40px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo"><img src="images/logo.png">KrishiVerse</a>
+    <ul>
+      <li><a href="#" data-key="nav_solutions">Solutions</a></li>
+      <li><a href="#" data-key="nav_community">Community</a></li>
+      <li><a href="#" data-key="nav_contact">Contact</a></li>
+      <li><a href="#" style="background:#b6f09c; color:#16480d; border-radius:18px; padding:8px 19px; font-weight:700;" data-key="nav_login">Login</a></li>
+    </ul>
+    <button class="lang-switch" onclick="switchLanguage()">Odia</button>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-title" data-key="hero_title">Empower Your Farm With Smart Technology</div>
+      <button class="hero-cta" data-key="explore_btn">Explore Solutions</button>
+    </div>
+  </section>
+
+  <!-- FEATURE CARDS -->
+  <div class="container">
+    <div class="card"><a href="equipment.html"><img src="images/eb.png"><h3 data-key="equip">Equipment Booking</h3></a></div>
+    <div class="card"><a href="crop.html"><img src="images/cr.png"><h3 data-key="crop">Crop Recommendation</h3></a></div>
+    <div class="card"><a href="http://127.0.0.1:8000"><img src="images/dd.png"><h3 data-key="disease">Disease Detection</h3></a></div>
+    <div class="card"><a href="marketplace.html"><img src="images/mp.png"><h3 data-key="market">Marketplace</h3></a></div>
+    <div class="card"><a href="schemes.html"><img src="images/gs.png"><h3 data-key="schemes">Govt Schemes</h3></a></div>
+    <div class="card"><a href="weather.html"><img src="images/wf.png"><h3 data-key="weather">Weather Forecast</h3></a></div>
+    <div class="card"><a href="agrinews.html"><img src="images/an.png"><h3 data-key="news">Agri News</h3></a></div>
+    <div class="card"><a href="training.html"><img src="images/tt.png"><h3 data-key="training">Training & Tutorials</h3></a></div>
+    <div class="card"><a href="soiltest.html"><img src="images/soil.png"><h3 data-key="soil">Book Soil Test</h3></a></div>
+    <div class="card"><a href="iot.html"><img src="images/iot.png"><h3 data-key="iot">IoT Installation</h3></a></div>
+  </div>
+
+  <!-- COMMUNITY REVIEWS -->
+  <section class="community">
+    <h2 data-key="community_title">What Farmers Say</h2>
+    <div class="reviews">
+      <div class="review"><strong>Ramesh, Odisha</strong><span data-key="review1">KrishiVerse guided me to grow the right crop for my land. Very reliable!</span></div>
+      <div class="review"><strong>Sita, Cuttack</strong><span data-key="review2">The equipment booking service saved me both money and effort.</span></div>
+      <div class="review"><strong>Mohan, Bhubaneswar</strong><span data-key="review3">Accurate weather updates helped me avoid losses this season.</span></div>
+      <div class="review"><strong>Gita, Puri</strong><span data-key="review4">Through tutorials, I learned modern techniques that boosted my yield.</span></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="#" data-key="about">About Us</a> | 
+      <a href="#" data-key="privacy">Privacy Policy</a> |
+      <a href="#" data-key="careers">Careers</a>
+    </div>
+    © 2025 KrishiVerse. All Rights Reserved.
+  </footer>
+
+  <script>
+    const translations = {
+      en: {
+        nav_solutions: "Solutions", nav_marketplace: "Marketplace", nav_community: "Community",
+        nav_contact: "Contact", nav_login: "Login",
+        hero_title: "Empower Your Farm With Smart Technology", explore_btn: "Explore Solutions",
+        equip: "Equipment Booking", crop: "Crop Recommendation", disease: "Disease Detection",
+        market: "Marketplace", schemes: "Govt Schemes", weather: "Weather Forecast",
+        news: "Agri News", training: "Training & Tutorials", soil: "Book Soil Test", iot: "IoT Installation",
+        community_title: "What Farmers Say",
+        review1: "KrishiVerse guided me to grow the right crop for my land. Very reliable!",
+        review2: "The equipment booking service saved me both money and effort.",
+        review3: "Accurate weather updates helped me avoid losses this season.",
+        review4: "Through tutorials, I learned modern techniques that boosted my yield.",
+        about: "About Us", privacy: "Privacy Policy", careers: "Careers"
+      },
+      od: {
+        nav_solutions: "ସମାଧାନ", nav_marketplace: "ବଜାର", nav_community: "ସମୁଦାୟ",
+        nav_contact: "ଯୋଗାଯୋଗ", nav_login: "ଲଗିନ୍",
+        hero_title: "ଆପଣଙ୍କ ଖେତକୁ ସ୍ମାର୍ଟ ଟେକ୍ନୋଲୋଜି ସହିତ ସକ୍ତିଶାଳୀ କରନ୍ତୁ", explore_btn: "ସମାଧାନଗୁଡିକ ଦେଖନ୍ତୁ",
+        equip: "ଯନ୍ତ୍ରପାତି ବୁକିଂ", crop: "ଫସଳ ସୁପାରିଶ", disease: "ରୋଗ ଚିହ୍ନଟ",
+        market: "ବଜାର", schemes: "ସରକାରୀ ଯୋଜନା", weather: "ଆବହାବାଣୀ",
+        news: "କୃଷି ସମାଚାର", training: "ପ୍ରଶିକ୍ଷଣ ଓ ପାଠ", soil: "ମାଟି ପରୀକ୍ଷା ବୁକ୍ କରନ୍ତୁ", iot: "IoT ସ୍ଥାପନ",
+        community_title: "ଚାଷୀମାନଙ୍କର ମତାମତ",
+        review1: "କୃଷିଭର୍ସ ମୋର ଜମି ପାଇଁ ଠିକ ଫସଳ ବାଛିବାରେ ମଦଦ କଲା।",
+        review2: "ଯନ୍ତ୍ରପାତି ବୁକିଂରୁ ସମୟ ଓ ଟଙ୍କା ବଞ୍ଚିଲା।",
+        review3: "ଠିକ ଆବହାବାଣୀରୁ ଏହି ମୌସମରେ ହାନି ରୋକିଲି।",
+        review4: "ପ୍ରଶିକ୍ଷଣରୁ ନୂତନ ପ୍ରଣାଳୀ ଶିଖି yield ବଢିଲା।",
+        about: "ଆମ ବିଷୟରେ", privacy: "ଗୋପନୀୟତା ନୀତି", careers: "ଚାକିରି"
+      }
+    };
+    let currentLang = "en";
+    function switchLanguage() {
+      currentLang = currentLang === "en" ? "od" : "en";
+      document.querySelectorAll("[data-key]").forEach(el => {
+        el.textContent = translations[currentLang][el.getAttribute("data-key")];
+      });
+      document.querySelector(".lang-switch").textContent = currentLang === "en" ? "Odia" : "English";
+    }
+  </script>
+</body>
+</html>
